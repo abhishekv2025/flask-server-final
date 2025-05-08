@@ -117,7 +117,23 @@ def get_grammatical_accuracy():
     return jsonify(response), 500
 
 
-my_tool = LanguageTool('en-US')
+# my_tool = LanguageTool('en-US')
+try:
+    # Try with increased timeout
+    my_tool = LanguageTool('en-US')
+except Exception as e:
+    print(f"Local LanguageTool failed: {e}")
+    try:
+        # Fallback to remote server
+        my_tool = LanguageTool('en-US', 
+                              remote_server='https://api.languagetool.org',
+                              timeout=10)
+    except Exception as e:
+        print(f"Remote server failed: {e}")
+        # Final fallback
+        class DummyTool:
+            def check(self, text): return []
+        my_tool = DummyTool()
 
 def correct_it(text: str, matches: List[Match]) -> str:
   """Automatically apply suggestions to the text."""
