@@ -1,7 +1,4 @@
-"""LanguageTool through server mode.
-
-    migration URL: https://languagetool.org/http-api/migration.php
-"""
+"""LanguageTool API for Python."""
 
 from .language_tag import LanguageTag
 from .match import Match
