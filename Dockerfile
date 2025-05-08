@@ -26,14 +26,15 @@
 # EXPOSE 5000
 
 
+
 # Use an official Python runtime with a more compatible base
 FROM python:3.9-slim-bookworm
 
 # Install system dependencies first
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    openjdk-17-jre-headless \
-    ca-certificates && \  # Now properly terminated
+        openjdk-17-jre-headless \
+        ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
 # Set environment variables
@@ -56,4 +57,3 @@ EXPOSE 5000
 
 # Run the application
 CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
-
