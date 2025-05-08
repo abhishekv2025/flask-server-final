@@ -25,29 +25,32 @@
 # # Expose the port the app runs on
 # EXPOSE 5000
 
+# Use an official Python runtime with a more compatible base
+FROM python:3.9-slim-bookworm
 
-# Use an official Python runtime as a parent image
-FROM python:3.9-slim
-
-# Install Java (required for LanguageTool)
+# Install system dependencies first
 RUN apt-get update && \
-    apt-get install -y openjdk-11-jre-headless && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y --no-install-recommends \
+    openjdk-17-jre-headless \  # Updated to Java 17 (more stable in Debian bookworm)
+    ca-certificates \          # Helps with SSL certificates
+    && rm -rf /var/lib/apt/lists/*
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 
-# Set the working directory in the container
+# Set the working directory
 WORKDIR /app
 
-# Copy the current directory contents into the container
-COPY . .
-
-# Install any needed packages specified in requirements.txt
+# Copy requirements first for better caching
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose the port the app runs on
+# Copy the rest of the application
+COPY . .
+
+# Expose port
 EXPOSE 5000
 
 # Run the application
