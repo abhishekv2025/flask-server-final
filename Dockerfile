@@ -35,6 +35,7 @@ RUN apt-get update && \
     ca-certificates \          # Helps with SSL certificates
     && rm -rf /var/lib/apt/lists/*
 
+    
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
