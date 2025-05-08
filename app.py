@@ -116,7 +116,6 @@ def get_grammatical_accuracy():
     }
     return jsonify(response), 500
 
-
 my_tool = LanguageTool('en-US')
 
 def correct_it(text: str, matches: List[Match]) -> str:
